@@ -1,29 +1,3 @@
 # Cteng
 
-TODO: Write a gem description
-
-## Installation
-
-Add this line to your application's Gemfile:
-
-    gem 'cteng'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install cteng
-
-## Usage
-
-TODO: Write usage instructions here
-
-## Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+Draft implementation of: http://alexangelini.com/2013-3-28_Thoughts_On_A_Text_Engine.html
