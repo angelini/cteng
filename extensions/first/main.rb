@@ -6,5 +6,19 @@ def translations
 end
 
 def handlers
-  []
+  [
+    [
+      'cursor-up',
+      lambda do |state, count|
+        puts "Moving cursor up by #{count}"
+      end
+    ],
+
+    [
+      'cursor-down',
+      lambda do |state, count|
+        puts "Moving cursor down by #{count}"
+      end
+    ]
+  ]
 end
