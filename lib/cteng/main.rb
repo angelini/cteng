@@ -63,7 +63,7 @@ class Main < EM::Connection
   end
 
   def receive_data(key)
-    events = @translator.generate_events key
+    events = @translator.generate_events key, translations
 
     events.each do |e|
       puts "Event: #{e}"
