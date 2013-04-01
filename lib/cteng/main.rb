@@ -35,7 +35,7 @@ class Main < EM::Connection
   end
 
   def translations
-    @extensions.map { |e| e.translations }.flatten 1
+    @extensions.map { |e| e.translations[@state.mode] }.flatten 1
   end
 
   def handlers
