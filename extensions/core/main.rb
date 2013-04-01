@@ -1,9 +1,17 @@
+def generate_movement(match, xmult, ymult)
+  count = match[0].reverse.slice(0..-2)
+  count = Integer(count) rescue 1
+
+  ["cursor-move", xmult * count, ymult * count]
+end
+
 def translations
   [
-    [/^j/, lambda { |_| ["cursor-move", 0, 1] }],
-    [/^k/, lambda { |_| ["cursor-move", 0, -1] }],
-    [/^h/, lambda { |_| ["cursor-move", -1, 0] }],
-    [/^l/, lambda { |_| ["cursor-move", 1, 0] }],
+    [/^j\d*/, lambda { |m| generate_movement m, 0, 1 }],
+    [/^k\d*/, lambda { |m| generate_movement m, 0, -1 }],
+    [/^h\d*/, lambda { |m| generate_movement m, -1, 0 }],
+    [/^l\d*/, lambda { |m| generate_movement m, 1, 0 }],
+    [/^i/, lambda { |_| ["change-mode", "insert"] }],
     [/^e/, lambda { |_| ["load-file", "/Users/alexangelini/Local/cteng/Gemfile"] }]
   ]
 end
@@ -28,6 +36,13 @@ def handlers
       'init-window',
       lambda do |state, width, height|
         state.create_window width, height
+      end
+    ],
+
+    [
+      'change-mode',
+      lambda do |state, mode|
+        state.mode = mode
       end
     ],
 
