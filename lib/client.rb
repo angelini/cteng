@@ -1,4 +1,4 @@
-require "termios"
+require "curses"
 require "eventmachine"
 
 class Client < EM::Connection
@@ -28,11 +28,21 @@ class KeyboardHandler < EM::Connection
   end
 end
 
+def setup_screen
+  Curses.noecho
+  Curses.init_screen
+
+  win = Curses::Window.new Curses.lines, Curses.cols, 0, 0
+
+  win.box "|", "-"
+  win.setpos 1, 1
+  win.refresh
+
+  win
+end
+
 EM.run {
-  attributes = Termios.tcgetattr($stdin).dup
-  attributes.lflag &= ~Termios::ECHO
-  attributes.lflag &= ~Termios::ICANON
-  Termios::tcsetattr($stdin, Termios::TCSANOW, attributes)
+  setup_screen
 
   q = EM::Queue.new
   EM.connect('localhost', 9000, Client, q)

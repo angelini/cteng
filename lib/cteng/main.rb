@@ -21,6 +21,11 @@ class Main < EM::Connection
       handlers.each do |h|
         @handler.handle h[1], event.slice(1..-1) if h[0] == event[0]
       end
+
+      puts '--- BUFFER ---'
+      @state.window.buffer.print
+      puts '--- END ---'
+
       @event_queue.pop(&cb)
     end
 
