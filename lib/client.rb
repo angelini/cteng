@@ -2,8 +2,9 @@ require "curses"
 require "eventmachine"
 
 class Client < EM::Connection
-  def initialize(q)
+  def initialize(q, win)
     @queue = q
+    @win = win
 
     cb = Proc.new do |key|
       send_data(key)
@@ -14,7 +15,15 @@ class Client < EM::Connection
   end
 
   def receive_data(data)
-    puts "Received from Cteng: #{data}"
+    data = Marshal.load(data)
+    @win.clear
+
+    data[:windows][0].each_with_index do |line, index|
+      @win << (line + "\n")
+    end
+
+    @win.setpos(data[:cursor][1], data[:cursor][0])
+    @win.refresh
   end
 end
 
@@ -32,19 +41,15 @@ def setup_screen
   Curses.noecho
   Curses.init_screen
 
-  win = Curses::Window.new Curses.lines, Curses.cols, 0, 0
-
-  win.box "|", "-"
-  win.setpos 1, 1
-  win.refresh
-
-  win
+  Curses::Window.new Curses.lines, Curses.cols, 0, 0
 end
 
 EM.run {
-  setup_screen
-
   q = EM::Queue.new
-  EM.connect('localhost', 9000, Client, q)
+  win = setup_screen
+
+  q.push("\\cinit-window #{win.maxx} #{win.maxy}")
+
+  EM.connect('localhost', 9000, Client, q, win)
   EM.open_keyboard(KeyboardHandler, q)
 }

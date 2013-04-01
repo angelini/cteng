@@ -7,13 +7,12 @@ class State
 
   def initialize
     @mode = 'default'
+    @cursor = Cursor.new
 
     buffer = Buffer.new
-    window = Window.new buffer, 0, 0
 
     @buffers = [buffer]
-    @windows = [window]
-    @cursor = Cursor.new
+    @windows = []
   end
 
   def window
@@ -22,5 +21,9 @@ class State
 
   def buffer
     window.buffer
+  end
+
+  def create_window(width, height)
+    windows << Window.new(buffers[0], width, height)
   end
 end

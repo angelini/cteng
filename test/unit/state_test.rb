@@ -19,20 +19,33 @@ class StateTest < MiniTest::Unit::TestCase
     assert_instance_of Buffer, state.buffers[0]
   end
 
-  def test_windows_contains_a_window
+  def test_windows_defaults_to_empty
+    assert_equal 0, state.windows.length
+  end
+
+  def test_creating_window
+    state.create_window 150, 150
+
     assert_equal 1, state.windows.length
     assert_instance_of Window, state.windows[0]
   end
 
-  def test_window_advances_with_cursor
+  def test_accessing_created_window
+    state.create_window 150, 150
+    assert_instance_of Window, state.window
+  end
+
+  def test_cursor_indices
+    state.create_window 150, 150
+    assert_instance_of Window, state.windows[0]
+
+
+    state.create_window 150, 150
+    assert_instance_of Window, state.windows[1]
+
     window_1 = state.window
-    assert_instance_of Window, window_1
-
-    state.windows << Window.new(state.buffer, 0, 0)
     state.cursor.window_index += 1
-
     window_2 = state.window
-    assert_instance_of Window, window_2
 
     assert window_1 != window_2
   end

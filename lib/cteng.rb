@@ -7,5 +7,6 @@ module Cteng
 end
 
 EventMachine.run {
-  EM.start_server('0.0.0.0', 9000, Cteng::Main, ARGV[0])
+  q = EM::Queue.new
+  EM.start_server('0.0.0.0', 9000, Cteng::Main, q, ARGV[0])
 }
