@@ -31,33 +31,46 @@ class TranslatorTest < MiniTest::Unit::TestCase
     assert_equal translator.buffer.length, 10
   end
 
-  def test_translate_empty_buffer
-    assert_empty translator.generate_events translations
-  end
-
   def test_no_match
-    translator.add_key 'x'
-    assert_empty translator.generate_events translations
+    assert_empty translator.generate_events 'x', translations
   end
 
   def test_translate_single_char
-    translator.add_key 'j'
-    events = translator.generate_events translations
+    events = translator.generate_events 'j', translations
     assert_equal ["event-1"], events[0]
   end
 
   def test_translate_multiple_char
     translator.add_key 'j'
-    translator.add_key 'k'
-    events = translator.generate_events translations
+    events = translator.generate_events 'k', translations
     assert_equal ["event-2"], events[0]
   end
 
   def test_multiple_matches
-    translator.add_key 'a'
-    events = translator.generate_events translations
+    events = translator.generate_events 'a', translations
     assert_equal 2, events.length
     assert_includes events, ["event-3"]
     assert_includes events, ["event-4"]
+  end
+
+  def test_command_without_args
+    events = translator.generate_events '\\cno-args', translations
+    assert_equal 1, events.length
+    assert_equal 'no-args', events[0][0]
+  end
+
+  def test_command_with_args
+    events = translator.generate_events '\\cwith-args 1 arg', translations
+    assert_equal 1, events.length
+    assert_equal 'with-args', events[0][0]
+    assert_equal '1', events[0][1]
+    assert_equal 'arg', events[0][2]
+  end
+
+  def test_command_wont_match_translation
+    events = translator.generate_events '\\ca', translations
+    assert_equal 1, events.length
+    assert events[0][0] != 'event-3'
+    assert events[0][0] != 'event-4'
   end
 end

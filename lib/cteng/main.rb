@@ -41,15 +41,6 @@ class Main < EM::Connection
     @extensions.map { |e| e.handlers }.flatten 1
   end
 
-  def command?(data)
-    data.slice(0..1) == "\\c"
-  end
-
-  def command_events(data)
-    command = data.slice 2..-1
-    [command.split(" ")]
-  end
-
   def response_data
     windows = @state.windows.map do |window|
       lines = []
@@ -72,12 +63,7 @@ class Main < EM::Connection
   end
 
   def receive_data(key)
-    if command? key
-      events = command_events key
-    else
-      @translator.add_key key.chomp
-      events = @translator.generate_events translations
-    end
+    events = @translator.generate_events key
 
     events.each do |e|
       puts "Event: #{e}"
