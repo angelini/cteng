@@ -3,6 +3,7 @@ require "cteng/state"
 require "cteng/translator"
 require "cteng/extension"
 require "cteng/handler"
+require "cteng/response"
 
 class Main < EM::Connection
   def initialize(q, folder)
@@ -22,7 +23,7 @@ class Main < EM::Connection
         @handler.handle h[1], event.slice(1..-1) if h[0] == event[0]
       end
 
-      send_data(response_data)
+      send_data(Response.generate @state)
       @event_queue.pop(&cb)
     end
 
@@ -39,27 +40,6 @@ class Main < EM::Connection
 
   def handlers
     @extensions.map { |e| e.handlers }.flatten 1
-  end
-
-  def response_data
-    windows = @state.windows.map do |window|
-      lines = []
-
-      window.height.times do |i|
-        if i < window.buffer.lines.length
-          lines << window.buffer.lines[i]
-        else
-          lines << ""
-        end
-      end
-
-      lines
-    end
-
-    Marshal.dump({
-      :cursor => [@state.cursor.x, @state.cursor.y],
-      :windows => windows
-    })
   end
 
   def receive_data(key)
