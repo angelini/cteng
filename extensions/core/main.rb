@@ -1,6 +1,6 @@
 def generate_movement(match, xmult, ymult)
-  count = match[0].reverse.slice(0..-2)
-  count = Integer(count) rescue 1
+  count = match[0][0..-2]
+  count = count.length > 0 ? Integer(count) : 1
 
   ["cursor-move", xmult * count, ymult * count]
 end
@@ -9,17 +9,17 @@ def translations
   {
     "default" =>
     [
-      [/^j\d*/, lambda { |m| generate_movement m, 0, 1 }],
-      [/^k\d*/, lambda { |m| generate_movement m, 0, -1 }],
-      [/^h\d*/, lambda { |m| generate_movement m, -1, 0 }],
-      [/^l\d*/, lambda { |m| generate_movement m, 1, 0 }],
-      [/^i/, lambda { |_| ["change-mode", "insert"] }],
-      [/^e/, lambda { |_| ["load-file", "/Users/alexangelini/Local/cteng/Gemfile"] }]
+      [/\d*j$/, lambda { |m| generate_movement m, 0, 1 }],
+      [/\d*k$/, lambda { |m| generate_movement m, 0, -1 }],
+      [/\d*h$/, lambda { |m| generate_movement m, -1, 0 }],
+      [/\d*l$/, lambda { |m| generate_movement m, 1, 0 }],
+      [/i$/, lambda { |_| ["change-mode", "insert"] }],
+      [/e$/, lambda { |_| ["load-file", "/Users/alexangelini/Local/cteng/Gemfile"] }]
     ],
 
       'insert' =>
     [
-      [/^[a-zA-Z]/, lambda { |m| ["insert-string", m[0]] }]
+      [/[a-zA-Z]$/, lambda { |m| ["insert-string", m[0]] }]
     ]
   }
 end

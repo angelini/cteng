@@ -1,5 +1,5 @@
 class Translator
-  attr_reader :buffer
+  attr_accessor :buffer
 
   def initialize
     @buffer = ""
@@ -20,13 +20,13 @@ class Translator
   end
 
   def add_key(key)
-    @buffer = key + @buffer
-    @buffer.slice! 10..-1
+    buffer << key
+    @buffer = buffer[-10..-1] || buffer
   end
 
   def translate(translations)
     translations.inject([]) do |events, trans|
-      matches = @buffer.scan(trans[0])
+      matches = buffer.scan(trans[0])
       events << trans[1].call(matches) if matches.length > 0
       events
     end

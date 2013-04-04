@@ -8,10 +8,10 @@ class TranslatorTest < MiniTest::Unit::TestCase
     @translator = Translator.new
 
     @translations = [
-      [/^j/, lambda { |m| ["event-1"] }],
-      [/^kj/, lambda { |m| ["event-2"] }],
-      [/^a/, lambda { |m| ["event-3"] }],
-      [/^a/, lambda { |m| ["event-4"] }]
+      [/j$/, lambda { |m| ["event-1"] }],
+      [/jk$/, lambda { |m| ["event-2"] }],
+      [/a$/, lambda { |m| ["event-3"] }],
+      [/a$/, lambda { |m| ["event-4"] }]
     ]
   end
 
@@ -23,7 +23,7 @@ class TranslatorTest < MiniTest::Unit::TestCase
   def test_adding_multiple_keys
     translator.add_key 'j'
     translator.add_key 'k'
-    assert_equal translator.buffer, 'kj'
+    assert_equal translator.buffer, 'jk'
   end
 
   def test_buffer_length
