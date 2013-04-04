@@ -33,6 +33,7 @@ class Engine
   end
 
   def input(key)
+    log.info key
     events = translator.generate_events key, translations
 
     events.each do |e|

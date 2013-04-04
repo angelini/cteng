@@ -16,5 +16,6 @@ end
 
 task :tmux, [:server_pane, :client_pane] => :clear_tmux do |t, args|
   `tmux send-keys -t #{args[:server_pane]} "bundle exec ruby #{server} #{extensions}" Enter`
+  sleep 1
   `tmux send-keys -t #{args[:client_pane]} "bundle exec ruby #{client}" Enter`
 end

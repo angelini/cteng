@@ -1,4 +1,5 @@
 require "curses"
+require "thread"
 require "eventmachine"
 
 class Client < EM::Connection
@@ -27,18 +28,10 @@ class Client < EM::Connection
   end
 end
 
-class KeyboardHandler < EM::Connection
-  def initialize(q)
-    @queue = q
-  end
-
-  def receive_data(key)
-    @queue.push key
-  end
-end
-
 def setup_screen
   Curses.noecho
+  Curses.cbreak
+  Curses.nonl
   Curses.init_screen
 
   Curses::Window.new Curses.lines, Curses.cols, 0, 0
@@ -51,5 +44,10 @@ EM.run {
   q.push("\\cinit-window #{win.maxx} #{win.maxy}")
 
   EM.connect('localhost', 9000, Client, q, win)
-  EM.open_keyboard(KeyboardHandler, q)
+
+  Thread.new do
+    while true
+      q.push Curses.getch
+    end
+  end
 }
