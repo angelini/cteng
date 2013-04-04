@@ -5,6 +5,10 @@ class Buffer
     @lines = []
   end
 
+  def length
+    lines.length
+  end
+
   def print
     lines.each { |l| puts l }
   end

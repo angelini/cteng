@@ -29,14 +29,25 @@ def handlers
     [
       'cursor-move',
       lambda do |state, x, y|
-        state.cursor.x += x
-        state.cursor.y += y
+        cursor = state.cursor
+        buffer = state.window.buffer
 
-        state.cursor.x = 0 if state.cursor.x < 0
-        state.cursor.y = 0 if state.cursor.y < 0
+        if y >= 0
+          y = [buffer.length - 1, cursor.y + y].min
+        else
+          y = [0, cursor.y + y].max
+        end
 
-        state.cursor.x = state.window.width - 1 if state.cursor.x >= state.window.width
-        state.cursor.y = state.window.height - 1 if state.cursor.y >= state.window.height
+        cursor.y = y < 0 ? 0 : y
+        line = state.window.current_line cursor.y
+
+        if x >= 0
+          x = [line.length - 1, cursor.x + x].min
+        else
+          x = [0, cursor.x + x].max
+        end
+
+        cursor.x = x < 0 ? 0 : x
       end
     ],
 

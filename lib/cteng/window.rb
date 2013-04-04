@@ -10,6 +10,7 @@ class Window
     @height = height
   end
 
-  def current_line
+  def current_line(cursor_y)
+    buffer.lines[y + cursor_y] || ""
   end
 end
