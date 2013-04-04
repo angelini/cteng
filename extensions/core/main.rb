@@ -7,7 +7,7 @@ end
 
 def translations
   {
-    'default' =>
+    "default" =>
     [
       [/^j\d*/, lambda { |m| generate_movement m, 0, 1 }],
       [/^k\d*/, lambda { |m| generate_movement m, 0, -1 }],

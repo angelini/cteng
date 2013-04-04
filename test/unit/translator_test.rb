@@ -48,6 +48,7 @@ class TranslatorTest < MiniTest::Unit::TestCase
 
   def test_multiple_matches
     events = translator.generate_events 'a', translations
+
     assert_equal 2, events.length
     assert_includes events, ["event-3"]
     assert_includes events, ["event-4"]
@@ -55,20 +56,23 @@ class TranslatorTest < MiniTest::Unit::TestCase
 
   def test_command_without_args
     events = translator.generate_events '\\cno-args', translations
+
     assert_equal 1, events.length
     assert_equal 'no-args', events[0][0]
   end
 
   def test_command_with_args
     events = translator.generate_events '\\cwith-args 1 arg', translations
+
     assert_equal 1, events.length
     assert_equal 'with-args', events[0][0]
-    assert_equal '1', events[0][1]
+    assert_equal 1, events[0][1]
     assert_equal 'arg', events[0][2]
   end
 
   def test_command_wont_match_translation
     events = translator.generate_events '\\ca', translations
+
     assert_equal 1, events.length
     assert events[0][0] != 'event-3'
     assert events[0][0] != 'event-4'

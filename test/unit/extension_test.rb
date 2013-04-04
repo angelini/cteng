@@ -11,7 +11,7 @@ class ExtensionTest < MiniTest::Unit::TestCase
     extensions = Extension.loadFolder(folder)
 
     assert_equal 2, extensions.length
-    assert_equal 2, extensions[0].translations.length
-    assert_equal 2, extensions[1].translations.length
+    assert_equal 2, extensions[0].translations['default'].length
+    assert_equal 2, extensions[1].translations['default'].length
   end
 end

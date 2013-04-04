@@ -10,8 +10,13 @@ class Translator
   end
 
   def command_events(data)
-    command = data.slice 2..-1
-    [command.split(" ")]
+    command = data.slice(2..-1).split " "
+
+    command = command.map do |arg|
+      arg =~ /^[0-9]+$/ ? Integer(arg) : arg
+    end
+
+    [command]
   end
 
   def add_key(key)
