@@ -1,13 +1,14 @@
-def translations
-  {
-    "default" =>
-    [
-      [/^a/, lambda { |_| ["second-1"] }],
-      [/^b/, lambda { |_| ["second-2"] }]
-    ]
-  }
-end
+class Second
+  include Extension
 
-def handlers
-  []
+  def default_translations
+    [
+      [/^a/, -> (_) { ["second-1"] }],
+      [/^b/, -> (_) { ["second-2"] }]
+    ]
+  end
+
+  def handlers
+    []
+  end
 end

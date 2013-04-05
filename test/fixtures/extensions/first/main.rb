@@ -1,20 +1,24 @@
-def translations
-  {
-    'default' =>
-    [
-      [/^c/, lambda { |_| ["first-1"] }],
-      [/^b/, lambda { |_| ["first-2"] }]
-    ]
-  }
-end
+class First
+  include Extension
 
-def handlers
-  [
+  def default_translations
     [
-      'matched-event',
-      lambda do |state|
-        state.cursor.x += 1
-      end
+      [/^c/, -> (_) { ["first-1"] }],
+      [/^b/, -> (_) { ["first-2"] }]
     ]
-  ]
+  end
+
+  def other_translations
+    []
+  end
+
+  def handlers
+    [
+      [
+        'matched-event', -> () do
+          cursor.x += 1
+        end
+      ]
+    ]
+  end
 end

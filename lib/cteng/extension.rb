@@ -1,19 +1,36 @@
-class Extension
-  attr_reader :translations, :handlers
+module Extension
+  attr_accessor :state, :cursor, :windows, :buffers,
+                :translations, :handlers
 
-  def self.loadFolder(folder)
-    if !File.directory? folder
-      raise "Extension folder not found: #{folder}"
-    end
-
-    Dir["#{folder}/*/main.rb"].map do |f|
-      load(f)
-      Extension.new translations(), handlers()
-    end
+  def self.included(base)
+    @classes ||= []
+    @classes << base
   end
 
-  def initialize(translations, handlers)
-    @translations = translations
-    @handlers = handlers
+  def self.classes
+    @classes
+  end
+
+  def load(state)
+    @state = state
+    @cursor = state.cursor
+    @windows = state.windows
+    @buffers = state.buffers
+
+    translations = {}
+    public_methods(false).grep(/\S+_translations$/) do |method|
+      mode = method.to_s.split("_")[0].to_sym
+      translations[mode] = send method
+    end
+
+    [translations, send(:handlers)]
+  end
+
+  def window
+    state.window
+  end
+
+  def buffer
+    state.buffer
   end
 end

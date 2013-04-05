@@ -11,7 +11,7 @@ class StateTest < MiniTest::Unit::TestCase
   end
 
   def test_default_mode
-    assert_equal 'default', state.mode
+    assert_equal :default, state.mode
   end
 
   def test_buffers_contains_a_buffer

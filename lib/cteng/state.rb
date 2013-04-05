@@ -6,7 +6,7 @@ class State
   attr_accessor :mode, :cursor, :windows, :buffers
 
   def initialize
-    @mode = 'default'
+    @mode = :default
     @cursor = Cursor.new
 
     buffer = Buffer.new

@@ -3,25 +3,16 @@ require "cteng/engine"
 require "logger"
 
 class EngineTest < MiniTest::Unit::TestCase
-  attr_accessor :engine
+  attr_accessor :engine, :folder, :state
 
   def setup
-    folder = File.dirname(__FILE__) + "/../fixtures/extensions"
+    @state = State.new
+    @folder = File.dirname(__FILE__) + "/../fixtures/extensions"
     log = Logger.new "/dev/null"
 
     output = lambda do |str| end
 
     @engine = Engine.new [], folder, log, output
-  end
-
-  def test_translations_depth
-    assert_equal 4, engine.translations.length
-    assert_equal 2, engine.translations[0].length
-  end
-
-  def test_handlers_depth
-    assert_equal 1, engine.handlers.length
-    assert_equal 2, engine.handlers[0].length
   end
 
   def test_input_creates_queue_events
@@ -49,5 +40,16 @@ class EngineTest < MiniTest::Unit::TestCase
     end
 
     engine.handle_event ["matched-event"]
+  end
+
+  def test_load_non_existant_folder
+    assert_raises(RuntimeError) { engine.loadExtensions 'does_no_exist', state }
+  end
+
+  def test_load_extensions
+    translations, handlers = engine.loadExtensions folder, state
+
+    assert_equal 4, translations[:default].length
+    assert_equal 1, handlers.length
   end
 end
