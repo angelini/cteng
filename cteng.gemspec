@@ -25,4 +25,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_development_dependency "guard-rake"
   spec.add_development_dependency "rb-fsevent"
+  spec.add_development_dependency "pry"
 end
