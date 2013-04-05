@@ -14,7 +14,8 @@ def translations
       [/\d*h$/, lambda { |m| generate_movement m, -1, 0 }],
       [/\d*l$/, lambda { |m| generate_movement m, 1, 0 }],
       [/i$/, lambda { |_| ["change-mode", "insert"] }],
-      [/e$/, lambda { |_| ["load-file", "/Users/alexangelini/Local/cteng/Gemfile"] }]
+      [/e$/, lambda { |_| ["load-file", "/Users/alexangelini/Local/cteng/Gemfile"] }],
+      [/w$/, lambda { |_| ["init-window", 100, 10] }]
     ],
 
       'insert' =>
