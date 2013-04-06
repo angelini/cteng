@@ -1,5 +1,7 @@
 class Response
   def self.generate(state)
+    cursor = state.cursor
+
     windows = state.windows.map do |window|
       lines = []
 
@@ -11,11 +13,18 @@ class Response
         end
       end
 
-      lines
+      { :lines => lines,
+        :height => window.height,
+        :width => window.width,
+        :x => window.x,
+        :y => window.y }
     end
 
+    p windows
+    a = { :x => cursor.x, :y => cursor.y }
+    p a
     Marshal.dump({
-      :cursor => [state.cursor.x, state.cursor.y],
+      :cursor => { :x => cursor.x, :y => cursor.y },
       :windows => windows
     })
   end

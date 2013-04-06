@@ -36,7 +36,7 @@ class EngineTest < MiniTest::Unit::TestCase
   def test_event_handling
     engine.output = lambda do |str|
       result = Marshal.load str
-      assert_equal 1, result[:cursor][0]
+      assert_equal 1, result[:cursor][:x]
     end
 
     engine.handle_event ["matched-event"]

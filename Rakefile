@@ -2,7 +2,7 @@ require "rake"
 require "rake/testtask"
 
 server = File.dirname(__FILE__) + '/lib/cteng.rb'
-client = File.dirname(__FILE__) + '/lib/client.rb'
+client = File.dirname(__FILE__) + '/lib/client/client.rb'
 extensions = File.dirname(__FILE__) + '/extensions'
 
 Rake::TestTask.new do |t|

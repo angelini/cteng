@@ -24,8 +24,8 @@ class ResponseTest < MiniTest::Unit::TestCase
     state.cursor.y = 15
 
     res = Marshal.load Response.generate(state)
-    assert_equal 10, res[:cursor][0]
-    assert_equal 15, res[:cursor][1]
+    assert_equal 10, res[:cursor][:x]
+    assert_equal 15, res[:cursor][:y]
   end
 
   def test_no_windows
@@ -34,10 +34,10 @@ class ResponseTest < MiniTest::Unit::TestCase
   end
 
   def test_window_at_top_left
-    state.buffers[0].lines = buffer
     state.create_window 100, 100
+    state.buffer.lines = buffer
 
     res = Marshal.load Response.generate(state)
-    assert_equal buffer[0], res[:windows][0][0]
+    assert_equal buffer[0], res[:windows][0][:lines][0]
   end
 end

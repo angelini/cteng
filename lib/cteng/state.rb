@@ -23,7 +23,9 @@ class State
     window.buffer
   end
 
-  def create_window(width, height)
-    windows << Window.new(buffers[0], width, height)
+  def create_window(width, height, x = 0, y = 0)
+    buffer = Buffer.new
+    buffers << buffer
+    windows << Window.new(buffer, width, height, x, y)
   end
 end

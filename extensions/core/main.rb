@@ -16,7 +16,8 @@ class Core
       [/\d*l$/, -> (m) { generate_movement m, 1, 0 }],
       [/i$/, -> (_) { ["change-mode", :insert] }],
       [/e$/, -> (_) { ["load-file", "/Users/alexangelini/Local/cteng/Gemfile"] }],
-      [/w$/, -> (_) { ["init-window", 100, 10] }]
+      [/w$/, -> (_) { ["split-window"] }],
+      [/s$/, -> (_) { ["move-window"] }]
     ]
   end
 
@@ -31,9 +32,9 @@ class Core
       [
         'cursor-move', -> (x, y) do
           y = if y >= 0
-            [buffer.length - 1, cursor.y + y].min
+            [window.y + buffer.length - 1, cursor.y + y].min
           else
-            [0, cursor.y + y].max
+            [window.y, cursor.y + y].max
           end
 
           cursor.y = y < 0 ? 0 : y
@@ -42,7 +43,7 @@ class Core
           x = if x >= 0
             [line.length - 1, cursor.x + x].min
           else
-            [0, cursor.x + x].max
+            [window.x, cursor.x + x].max
           end
 
           cursor.x = x < 0 ? 0 : x
@@ -52,6 +53,26 @@ class Core
       [
         'init-window', -> (width, height) do
           state.create_window width, height
+        end
+      ],
+
+      [
+        'split-window', -> () do
+          n_height = window.height / 2
+          window.height = n_height
+
+          state.create_window window.width, n_height - 1, 0, n_height
+        end
+      ],
+
+      [
+        'move-window', -> () do
+          n_win = windows[cursor.window_index + 1]
+          return if n_win == nil
+
+          cursor.window_index += 1
+          cursor.y = n_win.y
+          cursor.x = n_win.x
         end
       ],
 
