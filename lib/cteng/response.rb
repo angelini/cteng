@@ -20,9 +20,6 @@ class Response
         :y => window.y }
     end
 
-    p windows
-    a = { :x => cursor.x, :y => cursor.y }
-    p a
     Marshal.dump({
       :cursor => { :x => cursor.x, :y => cursor.y },
       :windows => windows
